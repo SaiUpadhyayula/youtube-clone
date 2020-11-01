@@ -17,5 +17,5 @@ public class Channel {
     private String ownerName;
     private String ownerEmail;
     private List<String> subscriberIds;
-    private Long ownerId;
+    private String ownerId;
 }

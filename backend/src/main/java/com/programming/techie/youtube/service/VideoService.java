@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class VideoService {
 
     private final VideoRepository videoRepository;
-    private final FileSystemService fileSystemService;
+    private final FileService fileSystemService;
     private final UserHistoryService userHistoryService;
 
     public VideoDto uploadVideo(MultipartFile file) {
@@ -38,7 +38,7 @@ public class VideoService {
     }
 
     public Resource downloadVideo(VideoDto videoDto) {
-        Resource resource = fileSystemService.loadFileAsResource(videoDto.getVideoUrl());
+        Resource resource = fileSystemService.readFile(videoDto.getVideoUrl());
         increaseViewCount(videoDto);
         userHistoryService.addVideo(videoDto);
         return resource;

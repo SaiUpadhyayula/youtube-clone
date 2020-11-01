@@ -4,6 +4,31 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+frontend/youtube-clone-ui/node_modules
+frontend/youtube-clone-ui/.pnp
+frontend/youtube-clone-ui/.pnp.js
+
+# testing
+frontend/youtube-clone-ui/coverage
+
+# production
+frontend/youtube-clone-ui/build
+
+# misc
+frontend/youtube-clone-ui/.DS_Store
+frontend/youtube-clone-ui/.env.local
+frontend/youtube-clone-ui/.env.development.local
+frontend/youtube-clone-ui/.env.test.local
+frontend/youtube-clone-ui/.env.production.local
+
+frontend/youtube-clone-ui/npm-debug.log*
+frontend/youtube-clone-ui/yarn-debug.log*
+frontend/youtube-clone-ui/yarn-error.log*
+
+
 ### STS ###
 .apt_generated
 .classpath

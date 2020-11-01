@@ -18,10 +18,11 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static org.springframework.util.StringUtils.cleanPath;
 
 @Service
-public class FileSystemService {
+public class FileSystemService implements FileService {
 
     public static final String UPLOAD_DIR = "user-files";
 
+    @Override
     public String upload(MultipartFile file) {
         String fileName = extractFileName(file);
         checkForInvalidCharactersInFileName(fileName);
@@ -34,7 +35,8 @@ public class FileSystemService {
         return fileName;
     }
 
-    public Resource loadFileAsResource(String fileName) {
+    @Override
+    public Resource readFile(String fileName) {
         try {
             Path fileUploadDirectory = Paths.get(UPLOAD_DIR).toAbsolutePath().normalize();
             Path filePath = fileUploadDirectory.resolve(fileName).normalize();
@@ -49,6 +51,7 @@ public class FileSystemService {
         }
     }
 
+    @Override
     public void deleteFile(String fileName) {
         Path fileUploadDirectory = Paths.get(UPLOAD_DIR).toAbsolutePath().normalize();
         Path filePath = fileUploadDirectory.resolve(fileName).normalize();

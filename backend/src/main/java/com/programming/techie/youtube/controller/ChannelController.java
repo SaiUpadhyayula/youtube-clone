@@ -20,7 +20,7 @@ public class ChannelController {
     private final ChannelService channelService;
 
     @PostMapping
-    public ResponseEntity create(ChannelRequest channelRequest) {
+    public ResponseEntity create(@RequestBody ChannelRequest channelRequest) {
         channelService.create(channelRequest);
         return ResponseEntity.status(CREATED).build();
     }

@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class ChannelRequest {
     private String channelId;
     private String channelName;
-    private Long userId;
+    private String userId;
 }

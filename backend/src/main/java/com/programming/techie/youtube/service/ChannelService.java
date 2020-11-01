@@ -10,7 +10,9 @@ import com.programming.techie.youtube.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,9 +23,24 @@ public class ChannelService {
     private final UserRepository userRepository;
 
     public void create(ChannelRequest channelRequest) {
+        User user = userRepository.findById(channelRequest.getUserId())
+                .orElseThrow(() -> new YoutubeCloneException("Unknown Userid - " + channelRequest.getUserId()));
+        checkIfChannelNameAlreadyTaken(channelRequest);
+
         Channel channel = new Channel();
         channel.setTitle(channelRequest.getChannelName());
+        channel.setOwnerId(user.getId());
+        channel.setOwnerEmail(user.getEmailAddress());
+        channel.setOwnerName(user.getFullName());
+        channel.setSubscriberIds(Collections.emptyList());
         channelRepository.save(channel);
+    }
+
+    private void checkIfChannelNameAlreadyTaken(ChannelRequest channelRequest) {
+        Optional<Channel> channelByName = channelRepository.findByTitle(channelRequest.getChannelName());
+        channelByName.ifPresent(channel -> {
+            throw new YoutubeCloneException("Title - " + channel.getTitle() + " already exists, please choose another title");
+        });
     }
 
     public List<ChannelDto> getAllChannels() {
@@ -33,6 +50,7 @@ public class ChannelService {
 
     public void editChannel(ChannelRequest channelRequest) {
         Channel channel = getChannelById(channelRequest.getChannelId());
+        checkIfChannelNameAlreadyTaken(channelRequest);
         channel.setTitle(channelRequest.getChannelName());
         channelRepository.save(channel);
     }
@@ -48,6 +66,7 @@ public class ChannelService {
 
     private ChannelDto mapChannel(Channel channel) {
         ChannelDto channelDto = new ChannelDto();
+        channelDto.setChannelId(channel.getId());
         channelDto.setChannelName(channel.getTitle());
         channelDto.setSubscriberCount(channel.getSubscriberIds().size());
         return channelDto;

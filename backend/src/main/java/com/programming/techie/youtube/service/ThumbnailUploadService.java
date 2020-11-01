@@ -6,9 +6,9 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class ThumbnailUploadService {
 
-    private final FileSystemService fileSystemService;
+    private final FileService fileSystemService;
 
-    public ThumbnailUploadService(FileSystemService service) {
+    public ThumbnailUploadService(FileService service) {
         this.fileSystemService = service;
     }
 
