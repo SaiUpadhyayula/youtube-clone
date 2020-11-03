@@ -48,7 +48,7 @@ public class ChannelController {
     }
 
     @PutMapping("{id}subscribe/{userId}")
-    public void subscribeUser(@PathVariable String id, @PathVariable String userId) {
-        channelService.subscribeUser(id, userId);
+    public ResponseEntity<ChannelDto> subscribeUser(@PathVariable String id, @PathVariable String userId) {
+        return ResponseEntity.ok(channelService.subscribeUser(id, userId));
     }
 }

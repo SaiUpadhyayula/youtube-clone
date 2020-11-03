@@ -72,7 +72,7 @@ public class ChannelService {
         return channelDto;
     }
 
-    public void subscribeUser(String id, String userId) {
+    public ChannelDto subscribeUser(String id, String userId) {
         Channel channelById = getChannelById(id);
         List<String> subscriberIds = channelById.getSubscriberIds();
         if (subscriberIds.contains(userId)) {
@@ -85,6 +85,7 @@ public class ChannelService {
         User user = getUserById(userId);
         user.getSubscribedChannelIds().add(id);
         userRepository.save(user);
+        return mapChannel(channelById);
     }
 
     private User getUserById(String userId) {

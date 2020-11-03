@@ -1,5 +1,6 @@
 package com.programming.techie.youtube.controller;
 
+import com.programming.techie.youtube.dto.UploadVideoResponse;
 import com.programming.techie.youtube.dto.VideoDto;
 import com.programming.techie.youtube.exception.YoutubeCloneException;
 import com.programming.techie.youtube.service.VideoService;
@@ -25,12 +26,13 @@ public class VideoController {
     private final VideoService videoService;
 
     @PostMapping("upload")
-    public ResponseEntity<VideoDto> uploadVideo(@RequestParam("file") MultipartFile file,
-                                                UriComponentsBuilder uriComponentsBuilder) {
-        VideoDto videoDto = videoService.uploadVideo(file);
-        UriComponents uriComponents = uriComponentsBuilder.path("/{id}").buildAndExpand(videoDto.getVideoId());
+    public ResponseEntity<UploadVideoResponse> uploadVideo(@RequestParam("file") MultipartFile file,
+                                                           @RequestParam("channelId") String channelId,
+                                                           UriComponentsBuilder uriComponentsBuilder) {
+        UploadVideoResponse videoResponse = videoService.uploadVideo(file, channelId);
+        UriComponents uriComponents = uriComponentsBuilder.path("/{id}").buildAndExpand(videoResponse.getVideoId());
         return ResponseEntity.created(uriComponents.toUri())
-                .body(videoDto);
+                .body(videoResponse);
     }
 
     @GetMapping("download/{id}")
@@ -46,14 +48,19 @@ public class VideoController {
     }
 
     @PutMapping
-    public ResponseEntity<Void> editVideoMetadata(VideoDto videoMetaDataDto) {
-        videoService.editVideoMetadata(videoMetaDataDto);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<VideoDto> editVideoMetadata(@RequestBody VideoDto videoMetaDataDto) {
+        return ResponseEntity.ok(videoService.editVideoMetadata(videoMetaDataDto));
     }
 
     @GetMapping("{id}")
     public ResponseEntity<VideoDto> getVideoMetaData(@PathVariable String id) {
         VideoDto videoDto = videoService.getVideo(id);
+        return ResponseEntity.ok(videoDto);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<VideoDto>> getVideoMetaData() {
+        List<VideoDto> videoDto = videoService.getAllVideos();
         return ResponseEntity.ok(videoDto);
     }
 

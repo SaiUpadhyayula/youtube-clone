@@ -1,7 +1,9 @@
 package com.programming.techie.youtube.service;
 
+import com.programming.techie.youtube.dto.UploadVideoResponse;
 import com.programming.techie.youtube.dto.VideoDto;
 import com.programming.techie.youtube.exception.YoutubeCloneException;
+import com.programming.techie.youtube.mapper.VideoMapper;
 import com.programming.techie.youtube.model.Video;
 import com.programming.techie.youtube.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,57 +22,58 @@ public class VideoService {
     private final VideoRepository videoRepository;
     private final FileService fileSystemService;
     private final UserHistoryService userHistoryService;
+    private final VideoMapper videoMapper;
 
-    public VideoDto uploadVideo(MultipartFile file) {
+    public UploadVideoResponse uploadVideo(MultipartFile file, String channelId) {
         String fileName = fileSystemService.upload(file);
         Video video = new Video();
         video.setFileName(fileName);
+        Objects.requireNonNull(channelId);
+        video.setChannelId(channelId);
         videoRepository.save(video);
-        return mapToDto(video);
+        return new UploadVideoResponse(video.getId(), fileName);
+    }
+
+    public List<VideoDto> getAllVideos() {
+        return videoRepository.findAll()
+                .stream()
+                .map(videoMapper::mapToDto)
+                .collect(Collectors.toList());
     }
 
     public VideoDto getVideo(String id) {
-        return mapToDto(getVideoById(id));
-    }
-
-    private Video getVideoById(String id) {
-        return videoRepository.findById(id)
-                .orElseThrow(() -> new YoutubeCloneException("Cannot find Video with ID - " + id));
-    }
-
-    public Resource downloadVideo(VideoDto videoDto) {
-        Resource resource = fileSystemService.readFile(videoDto.getVideoUrl());
-        increaseViewCount(videoDto);
-        userHistoryService.addVideo(videoDto);
-        return resource;
-    }
-
-    private void increaseViewCount(VideoDto videoDto) {
-        Video videoById = getVideoById(videoDto.getVideoId());
-        videoById.setViewCount(videoById.increaseViewCount());
-        videoRepository.save(videoById);
-    }
-
-    private VideoDto mapToDto(Video video) {
-        VideoDto videoDto = new VideoDto();
-        videoDto.setVideoId(video.getId());
-        videoDto.setVideoUrl(video.getFileName());
-        return videoDto;
-    }
-
-    public void editVideoMetadata(VideoDto videoMetaDataDto) {
-
+        return videoMapper.mapToDto(getVideoById(id));
     }
 
     public List<VideoDto> getAllVideosByChannel(String channelId) {
         List<Video> videos = videoRepository.findByChannelId(channelId);
         return videos.stream()
-                .map(video -> mapToDto(video))
+                .map(videoMapper::mapToDto)
                 .collect(Collectors.toList());
     }
 
+    public Resource downloadVideo(VideoDto videoDto) {
+        Resource resource = fileSystemService.readFile(videoDto.getFileName());
+        increaseViewCount(videoDto);
+        userHistoryService.addVideo(videoDto);
+        return resource;
+    }
+
+    public VideoDto editVideoMetadata(VideoDto videoMetaDataDto) {
+        Video video = getVideoById(videoMetaDataDto.getVideoId());
+        video.setTitle(videoMetaDataDto.getVideoName());
+        video.setDescription(videoMetaDataDto.getDescription());
+        video.setFileName(videoMetaDataDto.getFileName());
+        // Ignore Channel ID as it should not be possible to change the Channel of a Video
+        video.setTags(videoMetaDataDto.getTags());
+        video.setVideoStatus(videoMetaDataDto.getVideoStatus());
+        // View Count is also ignored as its calculated independently
+        videoRepository.save(video);
+        return videoMapper.mapToDto(video);
+    }
+
     public void deleteVideo(String id) {
-        String videoUrl = getVideo(id).getVideoUrl();
+        String videoUrl = getVideo(id).getFileName();
         fileSystemService.deleteFile(videoUrl);
     }
 
@@ -78,7 +82,20 @@ public class VideoService {
         return videoRepository.findByTagsIn(video.getTags())
                 .stream()
                 .filter(suggestedVideo -> !suggestedVideo.getId().equals(id))
-                .map(vid -> mapToDto(vid))
+                .limit(5)
+                .map(videoMapper::mapToDto)
                 .collect(Collectors.toList());
     }
+
+    private void increaseViewCount(VideoDto videoDto) {
+        Video videoById = getVideoById(videoDto.getVideoId());
+        videoById.setViewCount(videoById.increaseViewCount());
+        videoRepository.save(videoById);
+    }
+
+    private Video getVideoById(String id) {
+        return videoRepository.findById(id)
+                .orElseThrow(() -> new YoutubeCloneException("Cannot find Video with ID - " + id));
+    }
+
 }
