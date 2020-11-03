@@ -15,6 +15,8 @@ public class VideoMapper {
                 .videoName(video.getTitle())
                 .videoStatus(video.getVideoStatus())
                 .channelId(video.getChannelId())
+                .likeCount(video.getLikes())
+                .dislikeCount(video.getDislikes())
                 .build();
     }
 

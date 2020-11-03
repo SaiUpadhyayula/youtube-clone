@@ -77,19 +77,19 @@ public class VideoController {
         return ResponseEntity.ok(allVideosByChannel);
     }
 
-    @PostMapping("like")
-    public void likeVideo() {
-
+    @PostMapping("{id}/like")
+    public ResponseEntity<VideoDto> likeVideo(@PathVariable String id) {
+        return ResponseEntity.ok(videoService.like(id));
     }
 
-    @PostMapping("dislike")
-    public void disLikeVideo() {
-
+    @PostMapping("{id}/dislike")
+    public ResponseEntity<VideoDto> disLikeVideo(@PathVariable String id) {
+        return ResponseEntity.ok(videoService.dislike(id));
     }
 
-    @GetMapping("suggested/{id}")
-    public ResponseEntity<List<VideoDto>> getSuggestedVideos(@PathVariable String id) {
-        return ResponseEntity.ok(videoService.getSuggestedVideos(id));
+    @GetMapping("suggested/{userId}")
+    public ResponseEntity<List<VideoDto>> getSuggestedVideos(@PathVariable String userId) {
+        return ResponseEntity.ok(videoService.getSuggestedVideos(userId));
     }
 
     private String determineContentType(HttpServletRequest request, Resource resource) {

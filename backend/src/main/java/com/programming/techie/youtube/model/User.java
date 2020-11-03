@@ -5,7 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -19,6 +21,28 @@ public class User {
     private String picture;
     private String emailAddress;
     private String sub;
-    private List<String> subscribedChannelIds;
-    private List<Integer> videoHistory;
+    private Set<String> subscribedChannelIds = new HashSet<>();
+    private Set<String> videoHistory = new LinkedHashSet<>();
+    private Set<String> likedVideos = new HashSet<>();
+    private Set<String> disLikedVideos = new HashSet<>();
+
+    public void addToLikedVideos(String videoId) {
+        likedVideos.add(videoId);
+    }
+
+    public void removeFromLikedVideos(String videoId) {
+        likedVideos.remove(videoId);
+    }
+
+    public void addToDisLikedVideo(String videoId) {
+        disLikedVideos.add(videoId);
+    }
+
+    public void removeFromDisLikedVideo(String videoId) {
+        disLikedVideos.remove(videoId);
+    }
+
+    public void addToVideoHistory(String videoId) {
+        videoHistory.add(videoId);
+    }
 }

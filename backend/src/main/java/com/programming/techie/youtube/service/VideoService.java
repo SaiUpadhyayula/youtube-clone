@@ -13,7 +13,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +23,7 @@ public class VideoService {
 
     private final VideoRepository videoRepository;
     private final FileService fileSystemService;
-    private final UserHistoryService userHistoryService;
+    private final UserService userService;
     private final VideoMapper videoMapper;
 
     public UploadVideoResponse uploadVideo(MultipartFile file, String channelId) {
@@ -55,7 +57,7 @@ public class VideoService {
     public Resource downloadVideo(VideoDto videoDto) {
         Resource resource = fileSystemService.readFile(videoDto.getFileName());
         increaseViewCount(videoDto);
-        userHistoryService.addVideo(videoDto);
+        userService.addVideo(videoDto);
         return resource;
     }
 
@@ -77,11 +79,16 @@ public class VideoService {
         fileSystemService.deleteFile(videoUrl);
     }
 
-    public List<VideoDto> getSuggestedVideos(String id) {
-        Video video = getVideoById(id);
-        return videoRepository.findByTagsIn(video.getTags())
+    public List<VideoDto> getSuggestedVideos(String userId) {
+        Set<String> likedVideos = userService.getLikedVideos(userId);
+        List<Video> likedVideoList = videoRepository.findByIdIn(likedVideos);
+        List<String> tags = likedVideoList.stream()
+                .map(video -> video.getTags())
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+
+        return videoRepository.findByTagsIn(tags)
                 .stream()
-                .filter(suggestedVideo -> !suggestedVideo.getId().equals(id))
                 .limit(5)
                 .map(videoMapper::mapToDto)
                 .collect(Collectors.toList());
@@ -89,7 +96,7 @@ public class VideoService {
 
     private void increaseViewCount(VideoDto videoDto) {
         Video videoById = getVideoById(videoDto.getVideoId());
-        videoById.setViewCount(videoById.increaseViewCount());
+        videoById.increaseViewCount();
         videoRepository.save(videoById);
     }
 
@@ -98,4 +105,35 @@ public class VideoService {
                 .orElseThrow(() -> new YoutubeCloneException("Cannot find Video with ID - " + id));
     }
 
+    public VideoDto like(String videoId) {
+        if (userService.ifLikedVideo(videoId)) {
+            throw new YoutubeCloneException("User already liked the video - " + videoId);
+        }
+        Video video = getVideoById(videoId);
+
+        if (userService.ifDisLikedVideo(videoId)) {
+            video.decreaseDisLikeCount();
+            userService.removeFromDisLikedVideo(videoId);
+        }
+        video.increaseLikeCount();
+        userService.addToLikedVideos(videoId);
+        videoRepository.save(video);
+        return videoMapper.mapToDto(video);
+    }
+
+    public VideoDto dislike(String videoId) {
+        if (userService.ifDisLikedVideo(videoId)) {
+            throw new YoutubeCloneException("User already disliked the video - " + videoId);
+        }
+
+        Video video = getVideoById(videoId);
+        if (userService.ifLikedVideo(videoId)) {
+            video.decreaseLikeCount();
+            userService.removeFromLikedVideos(videoId);
+        }
+        video.increaseDisLikeCount();
+        userService.addToDisLikedVideo(videoId);
+        videoRepository.save(video);
+        return videoMapper.mapToDto(video);
+    }
 }

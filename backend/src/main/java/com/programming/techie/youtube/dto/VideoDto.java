@@ -20,4 +20,6 @@ public class VideoDto {
     private List<String> tags;
     private VideoStatus videoStatus;
     private String fileName;
+    private int likeCount;
+    private int dislikeCount;
 }

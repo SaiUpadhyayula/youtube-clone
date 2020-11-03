@@ -25,7 +25,23 @@ public class Video {
     private VideoStatus videoStatus;
     private int viewCount = 0;
 
-    public Integer increaseViewCount() {
-        return viewCount + 1;
+    public void increaseViewCount() {
+        viewCount++;
+    }
+
+    public void increaseLikeCount() {
+        likes++;
+    }
+
+    public void decreaseLikeCount() {
+        likes--;
+    }
+
+    public void increaseDisLikeCount() {
+        dislikes++;
+    }
+
+    public void decreaseDisLikeCount() {
+        dislikes--;
     }
 }
