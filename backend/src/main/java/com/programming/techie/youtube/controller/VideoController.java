@@ -2,21 +2,22 @@ package com.programming.techie.youtube.controller;
 
 import com.programming.techie.youtube.dto.UploadVideoResponse;
 import com.programming.techie.youtube.dto.VideoDto;
-import com.programming.techie.youtube.exception.YoutubeCloneException;
 import com.programming.techie.youtube.service.VideoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.List;
+
+import static com.programming.techie.youtube.utils.HttpContentUtils.determineContentType;
 
 @RestController
 @RequestMapping("/api/video/")
@@ -48,7 +49,7 @@ public class VideoController {
     }
 
     @PutMapping
-    public ResponseEntity<VideoDto> editVideoMetadata(@RequestBody VideoDto videoMetaDataDto) {
+    public ResponseEntity<VideoDto> editVideoMetadata(@RequestBody @Validated VideoDto videoMetaDataDto) {
         return ResponseEntity.ok(videoService.editVideoMetadata(videoMetaDataDto));
     }
 
@@ -90,19 +91,5 @@ public class VideoController {
     @GetMapping("suggested/{userId}")
     public ResponseEntity<List<VideoDto>> getSuggestedVideos(@PathVariable String userId) {
         return ResponseEntity.ok(videoService.getSuggestedVideos(userId));
-    }
-
-    private String determineContentType(HttpServletRequest request, Resource resource) {
-        String contentType = null;
-        try {
-            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
-        } catch (IOException ex) {
-            throw new YoutubeCloneException("Exception occurred while downloading Video");
-        }
-
-        if (contentType == null) {
-            contentType = "application/octet-stream";
-        }
-        return contentType;
     }
 }

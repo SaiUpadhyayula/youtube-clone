@@ -24,6 +24,7 @@ public class Video {
     private String fileName;
     private VideoStatus videoStatus;
     private int viewCount = 0;
+    private String thumbnailUrl;
 
     public void increaseViewCount() {
         viewCount++;

@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Data
@@ -14,12 +17,19 @@ import java.util.List;
 @Builder
 public class VideoDto {
     private String videoId;
+    @NotBlank
     private String channelId;
+    @NotBlank
     private String videoName;
+    @NotBlank
     private String description;
+    @Size(min = 1)
     private List<String> tags;
     private VideoStatus videoStatus;
+    @NotBlank
     private String fileName;
+    @Min(value = 0)
     private int likeCount;
+    @Min(value = 0)
     private int dislikeCount;
 }
