@@ -4,9 +4,6 @@ import com.programming.techie.youtube.dto.UploadVideoResponse;
 import com.programming.techie.youtube.dto.VideoDto;
 import com.programming.techie.youtube.service.VideoService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -14,10 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-
-import static com.programming.techie.youtube.utils.HttpContentUtils.determineContentType;
 
 @RestController
 @RequestMapping("/api/video/")
@@ -34,18 +28,6 @@ public class VideoController {
         UriComponents uriComponents = uriComponentsBuilder.path("/{id}").buildAndExpand(videoResponse.getVideoId());
         return ResponseEntity.created(uriComponents.toUri())
                 .body(videoResponse);
-    }
-
-    @GetMapping("download/{id}")
-    public ResponseEntity<Resource> getVideo(@PathVariable String id, HttpServletRequest request) {
-        VideoDto videoDto = videoService.getVideo(id);
-        Resource resource = videoService.downloadVideo(videoDto);
-        String contentType = determineContentType(request, resource);
-
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(contentType))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-                .body(resource);
     }
 
     @PutMapping

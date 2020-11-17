@@ -9,17 +9,23 @@ class VideoCard extends React.Component {
 
     render() {
         return (
-            <div className="card ytc-card">
-                <img className="card-img-top" src="http://via.placeholder.com/350x250"
-                     alt="Card image cap"/>
-                <div className="card-body">
-                    <h6 className="card-subtitle mb-0 text-muted">{this.props.videoOwner}</h6>
-                    <h5 className="card-title big-font">
-                        <Link to="/video">{this.props.videoName}</Link>
-                    </h5>
-                    <p className="card-text">10 views &#183; 1 Month ago</p>
+            <Link to={`/video/${this.props.video.videoId}`}>
+                <div className="card mb-4 shadow-sm">
+                    <img className="card-img-top" src="http://via.placeholder.com/350x250"
+                         alt="Card image cap"/>
+                    <div className="card-body">
+                        <p className="card-title"><strong><Link
+                            to={`/video/${this.props.video.videoId}`}>{this.props.video.videoName}</Link></strong></p>
+                        <p className="card-text"><img width="28" height="28"
+                                                      src="https://res.cloudinary.com/douy56nkf/image/upload/v1594060920/defaults/txxeacnh3vanuhsemfc8.png"/>
+                            {this.props.video.videoOwner}</p>
+                        <div className="d-flex justify-content-between align-items-center">
+                            <p>10 views</p>
+                            <small className="text-muted">9 mins</small>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </Link>
         )
     }
 }

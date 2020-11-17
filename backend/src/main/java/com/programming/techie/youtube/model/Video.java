@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.content.commons.annotations.ContentId;
+import org.springframework.content.commons.annotations.ContentLength;
+import org.springframework.content.commons.annotations.MimeType;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
@@ -25,6 +28,12 @@ public class Video {
     private VideoStatus videoStatus;
     private int viewCount = 0;
     private String thumbnailUrl;
+    @ContentId
+    private String contentId;
+    @ContentLength
+    private long contentLength;
+    @MimeType
+    private String mimeType = "video/mp4";
 
     public void increaseViewCount() {
         viewCount++;

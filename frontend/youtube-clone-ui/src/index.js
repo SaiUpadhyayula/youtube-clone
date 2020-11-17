@@ -1,25 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import {Auth0Provider} from '@auth0/auth0-react';
 import reportWebVitals from "./reportWebVitals";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import 'bootstrap-css-only/css/bootstrap.min.css';
+import 'mdbreact/dist/css/mdb.css';
+import 'video-react/dist/video-react.css';
 import './index.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
+import Auth0ProviderWithHistory from "./auth/auth0-provider-with-history";
 
-const domain = process.env.REACT_APP_AUTH0_DOMAIN;
-const clientId = process.env.REACT_APP_AUTH0_CLIENT_ID;
 
 ReactDOM.render(
-    <Auth0Provider
-        domain={domain}
-        clientId={clientId}
-        redirectUri={window.location.origin}
-        audience="https://programming-techie.eu.auth0.com/api/v2/"
-        responseType="token id_token"
-        scope="read:current_user update:current_user_metadata">
+    <Auth0ProviderWithHistory>
         <App/>
-    </Auth0Provider>,
+    </Auth0ProviderWithHistory>,
     document.getElementById('root')
 );
 

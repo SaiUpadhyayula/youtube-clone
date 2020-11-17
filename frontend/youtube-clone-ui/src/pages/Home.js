@@ -1,5 +1,7 @@
 import React from 'react';
 import VideoCard from "../components/VideoCard";
+import {fetchVideos} from "../actions";
+import {connect} from "react-redux";
 
 class Home extends React.Component {
 
@@ -68,16 +70,17 @@ class Home extends React.Component {
     }
 
     render() {
-        const {videos} = this.state;
+        const {videos} = this.props;
         return (
-            <div className="card-list">
-                <div className="container">
-                    <h2 className="page-title">Recommended</h2>
-                    <div className="row">
-                        {this.renderVideos(videos)}
-                    </div>
+            <main role="main" className="ml-sm-auto col-lg-10 px-4">
+                <div
+                    className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 className="h2">Featured Videos</h1>
                 </div>
-            </div>
+                <div className="row">
+                    {this.renderVideos(videos)}
+                </div>
+            </main>
         );
     }
 }

@@ -22,7 +22,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.cors().and()
                 .authorizeRequests()
-                .antMatchers("/api/*")
+                .antMatchers("/api/**", "/**", "/videos")
                 .permitAll()
                 .anyRequest().authenticated().and()
                 .oauth2ResourceServer().jwt();

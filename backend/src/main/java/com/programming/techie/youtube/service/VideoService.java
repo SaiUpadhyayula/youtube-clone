@@ -57,7 +57,7 @@ public class VideoService {
     public Resource downloadVideo(VideoDto videoDto) {
         Resource resource = fileSystemService.readFile(videoDto.getFileName());
         increaseViewCount(videoDto);
-        userService.addVideo(videoDto);
+//        userService.addVideo(videoDto);
         return resource;
     }
 
