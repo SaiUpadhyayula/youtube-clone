@@ -1,12 +1,10 @@
 import React from 'react';
 import './App.css';
 import {useAuth0} from '@auth0/auth0-react';
-import Header from "./shared/Header";
 import {BrowserRouter as Router} from "react-router-dom";
-import Routes from "./Routes";
 import {initStore} from "./store";
 import {Provider} from "react-redux";
-import SideNav from "./components/SideNav";
+import Holder from "./pages/Holder";
 
 const store = initStore();
 
@@ -18,13 +16,7 @@ function App() {
     return (
         <Provider store={store}>
             <Router>
-                <Header/>
-                <div className="container-fluid">
-                    <div className="row">
-                        <SideNav/>
-                        <Routes/>
-                    </div>
-                </div>
+                <Holder/>
             </Router>
         </Provider>
     );

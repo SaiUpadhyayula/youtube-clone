@@ -1,17 +1,26 @@
 import React, {Component} from "react";
 import {Link} from "react-router-dom";
 import Dropzone from "react-dropzone";
-import {initVideo, uploadVideo} from "../actions";
 
 export class UploadVideoPage extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+        console.log(this.props);
         this.onDrop = (files) => {
             this.setState({files})
         };
         this.state = {
             files: []
         };
+        this.handleDrop = (file) => {
+            if (file.length !== 0) {
+                // initVideo().then(data => {
+                //     // uploadVideo(file, data._links.self.href).then(r => {
+                //     //     console.log(r.data)
+                //     // })
+                // });
+            }
+        }
     }
 
 
@@ -38,41 +47,50 @@ export class UploadVideoPage extends Component {
 
         return (
             <main role="main" className="ml-sm-auto col-lg-10 px-4">
-                <Dropzone onDrop={this.onDrop} onDropAccepted={this.handleDrop(files)}>
-                    {({getRootProps, getInputProps}) => (
-                        <main role="main" className="ml-sm-auto col-lg-10 px-4">
-                            <section className="container">
-                                <h4>Select files from your computer</h4>
-                                <div {...getRootProps({className: 'dropzone'})}>
-                                    <input {...getInputProps()} />
-                                    <button type="submit" className="btn btn-sm btn-primary"
-                                            id="js-upload-submit">Upload files
-                                    </button>
-                                </div>
-                                <hr/>
-                                <h4>OR</h4>
-                                <div {...getRootProps({className: 'dropzone'})}>
-                                    <input {...getInputProps()} />
-                                    <div className="upload-drop-zone" id="drop-zone">
-                                        <strong>Just drag and drop files here</strong>
-                                    </div>
-                                </div>
-                                <aside>
-                                    {this.displayFiles(files)}
-                                </aside>
-                            </section>
-                        </main>
-                    )}
-                </Dropzone>
+                <div className="row">
+                    <div className="col-md-6">
+                        <div className="input-group">
+                            <label>Title</label>
+                            <input type="text" className="form-control" placeholder="Username" aria-label="Username"
+                                   aria-describedby="basic-addon1"/>
+                        </div>
+                        <div className="input-group">
+                            <label>Description</label>
+                            <input type="text" className="form-control" placeholder="Username" aria-label="Username"
+                                   aria-describedby="basic-addon1"/>
+                        </div>
+                        <div className="input-group">
+                            <label>Video Status</label>
+                            <input type="text" className="form-control" placeholder="Username" aria-label="Username"
+                                   aria-describedby="basic-addon1"/>
+                        </div>
+                        <div className="input-group">
+                            <label>Tags</label>
+                            <input type="text" className="form-control" placeholder="Username" aria-label="Username"
+                                   aria-describedby="basic-addon1"/>
+                        </div>
+                    </div>
+                    <div className="col-md-6">
+                        <Dropzone onDrop={this.onDrop} onDropAccepted={this.handleDrop(files)}>
+                            {({getRootProps, getInputProps}) => (
+                                <main role="main" className="ml-sm-auto col-lg-10 px-4">
+                                    <section className="container">
+                                        <div {...getRootProps({className: 'dropzone'})}>
+                                            <input {...getInputProps()} />
+                                            <div className="upload-drop-zone" id="drop-zone">
+                                                <strong>Just drag and drop files here</strong>
+                                            </div>
+                                        </div>
+                                        <aside>
+                                            {this.displayFiles(files)}
+                                        </aside>
+                                    </section>
+                                </main>
+                            )}
+                        </Dropzone>
+                    </div>
+                </div>
             </main>
         );
-    }
-
-    handleDrop(file) {
-        if (file.length !== 0) {
-            initVideo().then(data => {
-                uploadVideo(file, data._links.self.href).then(r => console.log(r.data))
-            });
-        }
     }
 }

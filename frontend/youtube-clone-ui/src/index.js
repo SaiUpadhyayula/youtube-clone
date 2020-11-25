@@ -2,13 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import reportWebVitals from "./reportWebVitals";
-import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import 'bootstrap-css-only/css/bootstrap.min.css';
-import 'mdbreact/dist/css/mdb.css';
 import 'video-react/dist/video-react.css';
 import './index.css';
-import 'bootstrap/dist/js/bootstrap.min.js';
 import Auth0ProviderWithHistory from "./auth/auth0-provider-with-history";
 
 

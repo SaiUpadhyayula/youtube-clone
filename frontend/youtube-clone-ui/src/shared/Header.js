@@ -1,25 +1,30 @@
-import React from 'react';
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
 import LoginButton from "../components/LoginButton";
 import LogoutButton from "../components/LogoutButton";
-import CreateVideoButton from "../components/CreateVideoButton.js";
+import React from "react";
+import {makeStyles} from "@material-ui/core/styles";
 
-const Header = () => {
+const useStyles = makeStyles((theme) => ({
+    appBar: {
+        zIndex: theme.zIndex.drawer + 1,
+    }
+}));
+
+export default function Header() {
+
+    const classes = useStyles();
+
     return (
-        <div>
-            <nav className="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-                <a className="navbar-brand col-sm-3 col-md-2 mr-0" href="/">Youtube Clone</a>
-                <input className="form-control form-control-dark w-100" type="text" placeholder="Search"
-                       aria-label="Search"/>
-                <ul className="navbar-nav px-3">
-                    <li className="nav-item text-nowrap">
-                        <CreateVideoButton/>
-                        <LoginButton/>
-                        <LogoutButton/>
-                    </li>
-                </ul>
-            </nav>
-        </div>
+        <AppBar position="fixed" className={classes.appBar}>
+            <Toolbar>
+                <Typography variant="h6" noWrap>
+                    Youtube Clone
+                </Typography>
+                <LoginButton/>
+                <LogoutButton/>
+            </Toolbar>
+        </AppBar>
     )
 }
-
-export default Header;
