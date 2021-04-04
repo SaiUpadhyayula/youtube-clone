@@ -27,7 +27,7 @@ public class UserController {
     }
 
     @PostMapping("validate")
-    public ResponseEntity registerUser(HttpServletRequest httpServletRequest) {
+    public ResponseEntity<UserInfoDTO> registerUser(HttpServletRequest httpServletRequest) {
         UserInfoDTO userInfoDTO = userValidationService.validate(httpServletRequest.getHeader("Authorization"));
         userRegistrationService.register(userInfoDTO);
         return ResponseEntity.ok(userInfoDTO);

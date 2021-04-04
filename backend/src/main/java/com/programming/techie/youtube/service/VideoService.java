@@ -1,39 +1,50 @@
 package com.programming.techie.youtube.service;
 
+import com.programming.techie.youtube.dto.CommentDto;
 import com.programming.techie.youtube.dto.UploadVideoResponse;
 import com.programming.techie.youtube.dto.VideoDto;
 import com.programming.techie.youtube.exception.YoutubeCloneException;
+import com.programming.techie.youtube.mapper.CommentMapper;
 import com.programming.techie.youtube.mapper.VideoMapper;
+import com.programming.techie.youtube.model.Comment;
 import com.programming.techie.youtube.model.Video;
 import com.programming.techie.youtube.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
 public class VideoService {
 
     private final VideoRepository videoRepository;
-    private final FileService fileSystemService;
+    private final S3Service s3Service;
     private final UserService userService;
     private final VideoMapper videoMapper;
+    private final CommentMapper commentMapper;
 
-    public UploadVideoResponse uploadVideo(MultipartFile file, String channelId) {
-        String fileName = fileSystemService.upload(file);
+    public UploadVideoResponse uploadVideo(MultipartFile file, String userId) {
+        String url = s3Service.upload(file);
         Video video = new Video();
-        video.setFileName(fileName);
-        Objects.requireNonNull(channelId);
-        video.setChannelId(channelId);
+        video.setUrl(url);
+        Objects.requireNonNull(userId);
+        video.setUserId(userId);
         videoRepository.save(video);
-        return new UploadVideoResponse(video.getId(), fileName);
+        return new UploadVideoResponse(video.getId(), url);
+    }
+
+    public String uploadThumbnail(MultipartFile file, String videoId) {
+        Video video = getVideoById(videoId);
+        String url = s3Service.upload(file);
+        video.setThumbnailUrl(url);
+        videoRepository.save(video);
+        return url;
     }
 
     public List<VideoDto> getAllVideos() {
@@ -44,28 +55,25 @@ public class VideoService {
     }
 
     public VideoDto getVideo(String id) {
-        return videoMapper.mapToDto(getVideoById(id));
+        VideoDto videoDto = videoMapper.mapToDto(getVideoById(id));
+        // This method is called when the Get Video Metadata API is called, which is usually called when user clicks on
+        // a video, hence we will increase the view count of the video.
+        increaseViewCount(videoDto);
+        return videoDto;
     }
 
-    public List<VideoDto> getAllVideosByChannel(String channelId) {
-        List<Video> videos = videoRepository.findByChannelId(channelId);
+    public List<VideoDto> getAllVideosByChannel(String userId) {
+        List<Video> videos = videoRepository.findByUserId(userId);
         return videos.stream()
                 .map(videoMapper::mapToDto)
                 .collect(Collectors.toList());
-    }
-
-    public Resource downloadVideo(VideoDto videoDto) {
-        Resource resource = fileSystemService.readFile(videoDto.getFileName());
-        increaseViewCount(videoDto);
-//        userService.addVideo(videoDto);
-        return resource;
     }
 
     public VideoDto editVideoMetadata(VideoDto videoMetaDataDto) {
         Video video = getVideoById(videoMetaDataDto.getVideoId());
         video.setTitle(videoMetaDataDto.getVideoName());
         video.setDescription(videoMetaDataDto.getDescription());
-        video.setFileName(videoMetaDataDto.getFileName());
+        video.setUrl(videoMetaDataDto.getFileName());
         // Ignore Channel ID as it should not be possible to change the Channel of a Video
         video.setTags(videoMetaDataDto.getTags());
         video.setVideoStatus(videoMetaDataDto.getVideoStatus());
@@ -76,14 +84,14 @@ public class VideoService {
 
     public void deleteVideo(String id) {
         String videoUrl = getVideo(id).getFileName();
-        fileSystemService.deleteFile(videoUrl);
+        s3Service.deleteFile(videoUrl);
     }
 
     public List<VideoDto> getSuggestedVideos(String userId) {
         Set<String> likedVideos = userService.getLikedVideos(userId);
         List<Video> likedVideoList = videoRepository.findByIdIn(likedVideos);
         List<String> tags = likedVideoList.stream()
-                .map(video -> video.getTags())
+                .map(Video::getTags)
                 .flatMap(List::stream)
                 .collect(Collectors.toList());
 
@@ -135,5 +143,18 @@ public class VideoService {
         userService.addToDisLikedVideo(videoId);
         videoRepository.save(video);
         return videoMapper.mapToDto(video);
+    }
+
+    public void addComment(CommentDto commentDto, String videoId) {
+        Video video = getVideoById(videoId);
+        Comment comment = commentMapper.mapFromDto(commentDto);
+        video.addComment(comment);
+    }
+
+    public List<CommentDto> getAllComments(String videoId) {
+        return videoRepository.findById(videoId)
+                .stream()
+                .map(video -> commentMapper.mapToDtoList(video.getComments()))
+                .findAny().orElse(Collections.emptyList());
     }
 }

@@ -21,7 +21,7 @@ public class User {
     private String picture;
     private String emailAddress;
     private String sub;
-    private Set<String> subscribedChannelIds = new HashSet<>();
+    private Set<String> subscribeduserIds = new HashSet<>();
     private Set<String> videoHistory = new LinkedHashSet<>();
     private Set<String> likedVideos = new HashSet<>();
     private Set<String> disLikedVideos = new HashSet<>();

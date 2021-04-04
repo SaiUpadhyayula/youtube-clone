@@ -18,7 +18,7 @@ import java.util.List;
 public class VideoDto {
     private String videoId;
     @NotBlank
-    private String channelId;
+    private String userId;
     @NotBlank
     private String videoName;
     @NotBlank

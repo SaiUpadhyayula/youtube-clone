@@ -1,7 +1,7 @@
 exports.videoData = [
     {
         "videoId": "5faf3ab08c6fe061a9d3fa07",
-        "channelId": "5f9da3b9b25f2e0bccd37141",
+        "userId": "5f9da3b9b25f2e0bccd37141",
         "videoName": "Spring Boot Testing Tutorial Part 3",
         "description": "In this tutorial, we are going to learn how to Testing REST APIs using Spring Framework",
         "tags": [
@@ -19,7 +19,7 @@ exports.videoData = [
     },
     {
         "videoId": "5fb2b25e7f58805406ebd46f",
-        "channelId": null,
+        "userId": null,
         "videoName": "Avengers Assemble Scene: Avengers 2012",
         "description": "Avengers Assemble Scene",
         "tags": [

@@ -4,12 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.content.commons.annotations.ContentId;
-import org.springframework.content.commons.annotations.ContentLength;
-import org.springframework.content.commons.annotations.MimeType;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Data
 @AllArgsConstructor
@@ -20,38 +18,45 @@ public class Video {
     private String id;
     private String title;
     private String description;
-    private String channelId;
-    private int likes;
-    private int dislikes;
+    private String userId;
+    private AtomicInteger likes = new AtomicInteger(0);
+    private AtomicInteger disLikes = new AtomicInteger(0);
     private List<String> tags;
-    private String fileName;
+    private String url;
     private VideoStatus videoStatus;
-    private int viewCount = 0;
+    private AtomicInteger viewCount = new AtomicInteger(0);
     private String thumbnailUrl;
-    @ContentId
-    private String contentId;
-    @ContentLength
-    private long contentLength;
-    @MimeType
-    private String mimeType = "video/mp4";
+    private List<Comment> comments;
+
+    public int likeCount() {
+        return likes.get();
+    }
+
+    public int disLikeCount() {
+        return disLikes.get();
+    }
 
     public void increaseViewCount() {
-        viewCount++;
+        viewCount.incrementAndGet();
     }
 
     public void increaseLikeCount() {
-        likes++;
+        likes.incrementAndGet();
     }
 
     public void decreaseLikeCount() {
-        likes--;
+        likes.decrementAndGet();
     }
 
     public void increaseDisLikeCount() {
-        dislikes++;
+        disLikes.incrementAndGet();
     }
 
     public void decreaseDisLikeCount() {
-        dislikes--;
+        disLikes.decrementAndGet();
+    }
+
+    public void addComment(Comment comment) {
+        comments.add(comment);
     }
 }

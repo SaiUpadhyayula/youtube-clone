@@ -36,22 +36,6 @@ public class FileSystemService implements FileService {
     }
 
     @Override
-    public Resource readFile(String fileName) {
-        try {
-            Path fileUploadDirectory = Paths.get(UPLOAD_DIR).toAbsolutePath().normalize();
-            Path filePath = fileUploadDirectory.resolve(fileName).normalize();
-            Resource resource = new UrlResource(filePath.toUri());
-            if (resource.exists()) {
-                return resource;
-            } else {
-                throw new YoutubeCloneException("File not found " + fileName);
-            }
-        } catch (MalformedURLException ex) {
-            throw new YoutubeCloneException("File not found " + fileName, ex);
-        }
-    }
-
-    @Override
     public void deleteFile(String fileName) {
         Path fileUploadDirectory = Paths.get(UPLOAD_DIR).toAbsolutePath().normalize();
         Path filePath = fileUploadDirectory.resolve(fileName).normalize();

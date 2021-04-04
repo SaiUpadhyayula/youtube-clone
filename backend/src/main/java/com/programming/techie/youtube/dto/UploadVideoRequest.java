@@ -8,5 +8,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UploadVideoRequest {
-    private String channelId;
+    private String userId;
 }

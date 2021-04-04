@@ -64,8 +64,7 @@ public class UserService {
 
     private User getCurrentUser() {
         String sub = ((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getClaim("sub");
-        User user = userRepository.findBySub(sub).orElseThrow(() -> new YoutubeCloneException("Cannot find user with sub - " + sub));
-        return user;
+        return userRepository.findBySub(sub).orElseThrow(() -> new YoutubeCloneException("Cannot find user with sub - " + sub));
     }
 
     public Set<String> getLikedVideos(String userId) {
