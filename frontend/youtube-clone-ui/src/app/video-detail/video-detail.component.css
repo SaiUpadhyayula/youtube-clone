@@ -1,11 +1,11 @@
-.video-detail-card {
-  max-width: 75%;
-}
-
 .video-detail-header{
   padding-top: 15px;
 }
 
+.video-player{
+  margin-top: 10px;
+  margin-left: 5px;
+}
 .example-header-image {
   background-image: url('https://yt3.ggpht.com/ytc/AAUvwnjuYQrnTYr-sXVEBvCAmtT4nxF-3yhh5KnP0W6xmQ=s176-c-k-c0x00ffffff-no-rj');
   background-size: cover;

@@ -1,4 +1,11 @@
-<div fxLayout="row wrap">
-  <app-video-player></app-video-player>
-  <app-comments></app-comments>
+<div fxLayout="row wrap" fxFlexFill>
+  <div fxLayout="column">
+    <app-video-player class="video-player"></app-video-player>
+    <div class="mat-divider"></div>
+    <mat-divider></mat-divider>
+    <app-comments></app-comments>
+  </div>
+  <div fxLayout="column">
+    <app-suggestion-bar></app-suggestion-bar>
+  </div>
 </div>
