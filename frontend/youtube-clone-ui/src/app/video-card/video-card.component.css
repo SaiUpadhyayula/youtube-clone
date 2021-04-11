@@ -1,0 +1,16 @@
+.example-card {
+  max-width: 400px;
+}
+
+.example-header-image {
+  background-image: url('https://yt3.ggpht.com/ytc/AAUvwnjuYQrnTYr-sXVEBvCAmtT4nxF-3yhh5KnP0W6xmQ=s176-c-k-c0x00ffffff-no-rj');
+  background-size: cover;
+}
+.subtitles{
+  justify-content: space-between;
+}
+
+mat-card[ng-reflect-router-link] {
+  cursor: pointer;
+}
+
