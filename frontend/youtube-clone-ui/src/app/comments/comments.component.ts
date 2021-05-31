@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-comments',
@@ -7,9 +7,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CommentsComponent implements OnInit {
 
-  constructor() { }
+  showCommentSection: Boolean = false;
+
+  constructor() {
+  }
 
   ngOnInit(): void {
   }
 
+  showCommentButton() {
+    this.showCommentSection = true;
+  }
+
+  hideCommentButton() {
+    this.showCommentSection = false;
+  }
 }

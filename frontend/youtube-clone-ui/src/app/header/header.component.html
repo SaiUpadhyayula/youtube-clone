@@ -1,11 +1,14 @@
 <mat-toolbar color="primary">
-  <span>Youtube Clone</span>
+  <a routerLink="" class="logo">Youtube Clone</a>
   <span class="example-spacer">
   </span>
-  <button mat-icon-button>
-    <mat-icon>video_call</mat-icon>
-  </button>
-  <button mat-icon-button>
-    <mat-icon>account_circle</mat-icon>
-  </button>
+  <div *ngIf="isUserLoggedIn">
+    <a routerLink="/upload-video" mat-icon-button>
+      <mat-icon>video_call</mat-icon>
+    </a>
+    <button mat-icon-button>
+      <mat-icon>account_circle</mat-icon>
+    </button>
+  </div>
+  <a *ngIf="!isUserLoggedIn" (click)="login()" class="logo">Login</a>
 </mat-toolbar>

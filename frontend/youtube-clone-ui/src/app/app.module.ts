@@ -11,7 +11,6 @@ import {VideoDetailComponent} from './video-detail/video-detail.component';
 import {CommentsComponent} from './comments/comments.component';
 import {SidebarComponent} from './sidebar/sidebar.component';
 import {SuggestionBarComponent} from './suggestion-bar/suggestion-bar.component';
-import {TrendingComponent} from './trending/trending.component';
 import {AuthComponent} from './auth/auth.component';
 import {SubscriptionsComponent} from './subscriptions/subscriptions.component';
 import {LikedVideosComponent} from './liked-videos/liked-videos.component';
@@ -23,7 +22,7 @@ import {MatListModule} from "@angular/material/list";
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {FeaturedComponent} from './featured/featured.component';
 import {MatFormFieldModule} from "@angular/material/form-field";
-import { VideoCardComponent } from './video-card/video-card.component';
+import {VideoCardComponent} from './video-card/video-card.component';
 import {MatCardModule} from "@angular/material/card";
 import {FlexModule} from "@angular/flex-layout";
 
@@ -31,6 +30,22 @@ import {VgCoreModule} from '@videogular/ngx-videogular/core';
 import {VgControlsModule} from '@videogular/ngx-videogular/controls';
 import {VgOverlayPlayModule} from '@videogular/ngx-videogular/overlay-play';
 import {VgBufferingModule} from '@videogular/ngx-videogular/buffering';
+import {VideoDescriptionComponent} from './video-description/video-description.component';
+import {VideoTagListComponent} from './video-tag-list/video-tag-list.component';
+import {MatChipsModule} from "@angular/material/chips";
+import {MatInputModule} from "@angular/material/input";
+import {AuthService} from "./auth/auth.service";
+import {HttpClientModule} from "@angular/common/http";
+import {CallbackComponent} from './callback/callback.component';
+import {UploadVideoComponent} from './upload-video/upload-video.component';
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {NgxFileDropModule} from "ngx-file-drop";
+import {MatStepperModule} from "@angular/material/stepper";
+import {SaveVideoDetailsComponent} from './save-video-details/save-video-details.component';
+import {MatOptionModule} from "@angular/material/core";
+import {MatSelectModule} from "@angular/material/select";
+import {MatFileUploadModule} from "angular-material-fileupload";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
 
 @NgModule({
   declarations: [
@@ -42,13 +57,17 @@ import {VgBufferingModule} from '@videogular/ngx-videogular/buffering';
     CommentsComponent,
     SidebarComponent,
     SuggestionBarComponent,
-    TrendingComponent,
     AuthComponent,
     SubscriptionsComponent,
     LikedVideosComponent,
     HistoryComponent,
     FeaturedComponent,
-    VideoCardComponent
+    VideoCardComponent,
+    VideoDescriptionComponent,
+    VideoTagListComponent,
+    CallbackComponent,
+    UploadVideoComponent,
+    SaveVideoDetailsComponent
   ],
   imports: [
     BrowserModule,
@@ -65,9 +84,20 @@ import {VgBufferingModule} from '@videogular/ngx-videogular/buffering';
     VgCoreModule,
     VgControlsModule,
     VgOverlayPlayModule,
-    VgBufferingModule
+    VgBufferingModule,
+    MatChipsModule,
+    MatInputModule,
+    FormsModule,
+    HttpClientModule,
+    NgxFileDropModule,
+    MatStepperModule,
+    ReactiveFormsModule,
+    MatOptionModule,
+    MatSelectModule,
+    MatFileUploadModule,
+    MatSnackBarModule
   ],
-  providers: [],
+  providers: [AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

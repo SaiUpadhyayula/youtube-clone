@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TrendingComponent } from './trending.component';
+import { VideoTagListComponent } from './video-tag-list.component';
 
-describe('TrendingComponent', () => {
-  let component: TrendingComponent;
-  let fixture: ComponentFixture<TrendingComponent>;
+describe('VideoTagListComponent', () => {
+  let component: VideoTagListComponent;
+  let fixture: ComponentFixture<VideoTagListComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TrendingComponent ]
+      declarations: [ VideoTagListComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TrendingComponent);
+    fixture = TestBed.createComponent(VideoTagListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

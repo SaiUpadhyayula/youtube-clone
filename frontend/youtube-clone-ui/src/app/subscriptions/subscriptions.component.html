@@ -1,1 +1,15 @@
-<p>subscriptions works!</p>
+<mat-sidenav-container class="sidenav-container">
+  <app-sidebar></app-sidebar>
+  <div class="sidenav-content">
+    <div class="content">
+      <div fxLayout="row wrap">
+        <h3>This week</h3>
+      </div>
+      <div fxLayout="row wrap" fxLayoutGap="12px grid">
+        <div fxFlex="20%" *ngFor="let num of [1,2,3,4,5,6,7,8]">
+          <app-video-card></app-video-card>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-sidenav-container>

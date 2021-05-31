@@ -1,0 +1,8 @@
+.save-video-detail {
+  margin-top: 15px;
+}
+app-video-player{
+  position: relative;
+  display: flex;
+  background-color: black;
+}

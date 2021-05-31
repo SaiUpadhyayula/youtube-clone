@@ -2,14 +2,15 @@
   padding-top: 15px;
 }
 
-.video-player{
-  margin-top: 10px;
-  margin-left: 5px;
+.video-detail{
+  margin-top: 40px;
+  margin-left: 100px;
 }
 .example-header-image {
   background-image: url('https://yt3.ggpht.com/ytc/AAUvwnjuYQrnTYr-sXVEBvCAmtT4nxF-3yhh5KnP0W6xmQ=s176-c-k-c0x00ffffff-no-rj');
   background-size: cover;
 }
+
 .subtitles{
   justify-content: space-between;
 }
@@ -18,3 +19,46 @@ mat-card[ng-reflect-router-link] {
   cursor: pointer;
 }
 
+.suggestion-bar {
+  margin-top: 10px;
+}
+
+.video-avatar{
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+}
+
+.subscribe-button {
+  height: 40px;
+  justify-content: right;
+}
+
+.subscribe-button-clicked {
+  background-color: gray;
+  height: 40px;
+}
+
+.view-count {
+  padding-right: 5px;
+}
+
+.dot {
+  border-radius: 50%;
+  width: 5px;
+  height: 5px;
+  background-color: black;
+  display: inline-block;
+}
+
+.video-upload-date{
+  padding-left: 5px;
+}
+
+.thumbs-down {
+  padding-left: 15px;
+}
+
+.like-dislike-section {
+  padding-right: 10px;
+}

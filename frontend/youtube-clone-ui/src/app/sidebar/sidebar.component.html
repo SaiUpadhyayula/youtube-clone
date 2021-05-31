@@ -2,38 +2,22 @@
              [opened]="!isScreenSmall"
              [mode]="isScreenSmall?'over':'side'">
   <mat-nav-list>
-    <a mat-list-item class="item">
+    <a mat-list-item class="item" routerLink="">
       <mat-icon mat-list-icon>home</mat-icon>
       <p matLine>Home</p>
     </a>
 
-    <a mat-list-item class="item">
-      <mat-icon mat-list-icon>whatshot</mat-icon>
-      <p matLine>
-        Trending
-      </p>
-    </a>
-    <a mat-list-item class="item">
+    <a mat-list-item class="item" routerLink="/subscriptions">
       <mat-icon mat-list-icon>subscriptions</mat-icon>
       <p matLine>Subscriptions</p>
     </a>
 
-    <mat-divider></mat-divider>
-    <a mat-list-item class="item">
-      <mat-icon mat-list-icon>video_library</mat-icon>
-      <p matLine>Library</p>
-    </a>
-
     <div>
-      <a mat-list-item class="item">
+      <a mat-list-item class="item" routerLink="/history">
         <mat-icon mat-list-icon>history</mat-icon>
         <p matLine>History</p>
       </a>
-      <a mat-list-item class="item">
-        <mat-icon mat-list-icon>watch_later</mat-icon>
-        <p matLine>Watch Later</p>
-      </a>
-      <a mat-list-item class="item">
+      <a mat-list-item class="item" routerLink="/liked-videos">
         <mat-icon mat-list-icon>thumb_up</mat-icon>
         <p matLine>Liked Videos</p>
       </a>

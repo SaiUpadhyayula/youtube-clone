@@ -1,1 +1,38 @@
-<p>comments works!</p>
+<form class="example-form">
+  <mat-form-field class="example-full-width">
+    <mat-label>Leave a comment</mat-label>
+    <textarea matInput (focus)="this.showCommentButton()" (focusout)="this.hideCommentButton()" [mat-autosize]="true"
+              placeholder="Share your thoughts"></textarea>
+  </mat-form-field>
+  <div fxLayout="row" *ngIf="showCommentSection">
+    <div fxFlex="60%"></div>
+    <div fxFlex="40%" fxFlexAlign="end">
+      <span>
+        <button mat-button>CANCEL</button>
+      </span>
+      <span>
+        <button mat-button color="primary">COMMENT</button>
+      </span>
+    </div>
+  </div>
+</form>
+<mat-divider></mat-divider>
+<div class="view-comments" *ngFor="let num of [1,2,3,4,5,6,7,8]">
+  <div fxLayout="row">
+    <div fxFlex="50%">
+      <mat-card-header>
+        <div matCardAvatar class="example-header-image"></div>
+        <a matCardTitle class="comment-author" routerLink="">Programming Techie</a>
+        <p matCardSubtitle>1 Month Ago</p>
+      </mat-card-header>
+    </div>
+    <div fxFlex="50%" class="delete-comment" fxFlexAlign="end">
+      <button mat-icon-button>
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </div>
+  <div>
+    This is a great video, thanks for sharing, you deserve more subscribers
+  </div>
+</div>
