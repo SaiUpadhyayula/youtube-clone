@@ -21,7 +21,8 @@ public class User {
     private String picture;
     private String emailAddress;
     private String sub;
-    private Set<String> subscribeduserIds = new HashSet<>();
+    private Set<String> subscribedToUsers = new HashSet<>();
+    private Set<String> subscribers = new HashSet<>();
     private Set<String> videoHistory = new LinkedHashSet<>();
     private Set<String> likedVideos = new HashSet<>();
     private Set<String> disLikedVideos = new HashSet<>();
@@ -44,5 +45,13 @@ public class User {
 
     public void addToVideoHistory(String videoId) {
         videoHistory.add(videoId);
+    }
+
+    public void addToSubscribedUsers(String userId) {
+        subscribedToUsers.add(userId);
+    }
+
+    public void addToSubscribers(String userId) {
+        subscribers.add(userId);
     }
 }

@@ -6,7 +6,6 @@ import com.programming.techie.youtube.dto.VideoDto;
 import com.programming.techie.youtube.exception.YoutubeCloneException;
 import com.programming.techie.youtube.mapper.CommentMapper;
 import com.programming.techie.youtube.mapper.VideoMapper;
-import com.programming.techie.youtube.model.Comment;
 import com.programming.techie.youtube.model.Video;
 import com.programming.techie.youtube.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +30,7 @@ public class VideoService {
 
     public UploadVideoResponse uploadVideo(MultipartFile file, String userId) {
         String url = s3Service.upload(file);
-        Video video = new Video();
+        var video = new Video();
         video.setUrl(url);
         Objects.requireNonNull(userId);
         video.setUserId(userId);
@@ -40,7 +39,7 @@ public class VideoService {
     }
 
     public String uploadThumbnail(MultipartFile file, String videoId) {
-        Video video = getVideoById(videoId);
+        var video = getVideoById(videoId);
         String url = s3Service.upload(file);
         video.setThumbnailUrl(url);
         videoRepository.save(video);
@@ -55,7 +54,7 @@ public class VideoService {
     }
 
     public VideoDto getVideo(String id) {
-        VideoDto videoDto = videoMapper.mapToDto(getVideoById(id));
+        var videoDto = videoMapper.mapToDto(getVideoById(id));
         // This method is called when the Get Video Metadata API is called, which is usually called when user clicks on
         // a video, hence we will increase the view count of the video.
         increaseViewCount(videoDto);
@@ -70,7 +69,7 @@ public class VideoService {
     }
 
     public VideoDto editVideoMetadata(VideoDto videoMetaDataDto) {
-        Video video = getVideoById(videoMetaDataDto.getVideoId());
+        var video = getVideoById(videoMetaDataDto.getVideoId());
         video.setTitle(videoMetaDataDto.getVideoName());
         video.setDescription(videoMetaDataDto.getDescription());
         video.setUrl(videoMetaDataDto.getFileName());
@@ -103,7 +102,7 @@ public class VideoService {
     }
 
     private void increaseViewCount(VideoDto videoDto) {
-        Video videoById = getVideoById(videoDto.getVideoId());
+        var videoById = getVideoById(videoDto.getVideoId());
         videoById.increaseViewCount();
         videoRepository.save(videoById);
     }
@@ -117,7 +116,7 @@ public class VideoService {
         if (userService.ifLikedVideo(videoId)) {
             throw new YoutubeCloneException("User already liked the video - " + videoId);
         }
-        Video video = getVideoById(videoId);
+        var video = getVideoById(videoId);
 
         if (userService.ifDisLikedVideo(videoId)) {
             video.decreaseDisLikeCount();
@@ -134,7 +133,7 @@ public class VideoService {
             throw new YoutubeCloneException("User already disliked the video - " + videoId);
         }
 
-        Video video = getVideoById(videoId);
+        var video = getVideoById(videoId);
         if (userService.ifLikedVideo(videoId)) {
             video.decreaseLikeCount();
             userService.removeFromLikedVideos(videoId);
@@ -146,8 +145,8 @@ public class VideoService {
     }
 
     public void addComment(CommentDto commentDto, String videoId) {
-        Video video = getVideoById(videoId);
-        Comment comment = commentMapper.mapFromDto(commentDto);
+        var video = getVideoById(videoId);
+        var comment = commentMapper.mapFromDto(commentDto);
         video.addComment(comment);
     }
 

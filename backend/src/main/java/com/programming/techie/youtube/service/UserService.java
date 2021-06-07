@@ -9,7 +9,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Set;
 
 @Service
@@ -19,37 +18,37 @@ public class UserService {
     private final UserRepository userRepository;
 
     public void addVideo(VideoDto videoDto) {
-        User currentUser = getCurrentUser();
+        var currentUser = getCurrentUser();
         currentUser.addToVideoHistory(videoDto.getVideoId());
         userRepository.save(currentUser);
     }
 
-    public Set<String> get(String id) {
-        User user = userRepository.findById(id)
+    public Set<String> getHistory(String id) {
+        var user = userRepository.findById(id)
                 .orElseThrow(() -> new YoutubeCloneException("Cannot Find User with ID - " + id));
         return user.getVideoHistory();
     }
 
     public void addToLikedVideos(String videoId) {
-        User user = getCurrentUser();
+        var user = getCurrentUser();
         user.addToLikedVideos(videoId);
         userRepository.save(user);
     }
 
     public void removeFromLikedVideos(String videoId) {
-        User user = getCurrentUser();
+        var user = getCurrentUser();
         user.removeFromLikedVideos(videoId);
         userRepository.save(user);
     }
 
     public void addToDisLikedVideo(String videoId) {
-        User user = getCurrentUser();
+        var user = getCurrentUser();
         user.addToDisLikedVideo(videoId);
         userRepository.save(user);
     }
 
     public void removeFromDisLikedVideo(String videoId) {
-        User user = getCurrentUser();
+        var user = getCurrentUser();
         user.removeFromDisLikedVideo(videoId);
         userRepository.save(user);
     }
@@ -68,7 +67,14 @@ public class UserService {
     }
 
     public Set<String> getLikedVideos(String userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new YoutubeCloneException("Invalid user - " + userId));
+        var user = userRepository.findById(userId).orElseThrow(() -> new YoutubeCloneException("Invalid user - " + userId));
         return user.getLikedVideos();
+    }
+
+    public void subscribeUser(String userId) {
+        var currentUser = getCurrentUser();
+        currentUser.addToSubscribedUsers(userId);
+        var subscribedToUser = userRepository.findById(userId).orElseThrow(() -> new YoutubeCloneException("Invalid User - " + userId));
+        subscribedToUser.addToSubscribers(subscribedToUser.getId());
     }
 }

@@ -5,7 +5,7 @@ import com.programming.techie.youtube.service.UserRegistrationService;
 import com.programming.techie.youtube.service.UserService;
 import com.programming.techie.youtube.service.UserValidationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,15 +21,22 @@ public class UserController {
     private final UserRegistrationService userRegistrationService;
 
     @GetMapping("{id}/history")
-    public ResponseEntity<Set<String>> userHistory(@PathVariable String id) {
-        return ResponseEntity.ok(userService.
-                get(id));
+    @ResponseStatus(HttpStatus.OK)
+    public Set<String> userHistory(@PathVariable String id) {
+        return userService.getHistory(id);
     }
 
     @PostMapping("validate")
-    public ResponseEntity<UserInfoDTO> registerUser(HttpServletRequest httpServletRequest) {
-        UserInfoDTO userInfoDTO = userValidationService.validate(httpServletRequest.getHeader("Authorization"));
+    @ResponseStatus(HttpStatus.OK)
+    public UserInfoDTO registerUser(HttpServletRequest httpServletRequest) {
+        var userInfoDTO = userValidationService.validate(httpServletRequest.getHeader("Authorization"));
         userRegistrationService.register(userInfoDTO);
-        return ResponseEntity.ok(userInfoDTO);
+        return userInfoDTO;
+    }
+
+    @PostMapping("subscribe/{userId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void subscribeUser(@PathVariable String userId) {
+        userService.subscribeUser(userId);
     }
 }

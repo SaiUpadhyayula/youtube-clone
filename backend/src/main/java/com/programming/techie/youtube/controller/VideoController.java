@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
@@ -27,7 +26,7 @@ public class VideoController {
                                                            @RequestParam("userId") String userId,
                                                            UriComponentsBuilder uriComponentsBuilder) {
         UploadVideoResponse videoResponse = videoService.uploadVideo(file, userId);
-        UriComponents uriComponents = uriComponentsBuilder.path("/{id}").buildAndExpand(videoResponse.getVideoId());
+        var uriComponents = uriComponentsBuilder.path("/{id}").buildAndExpand(videoResponse.getVideoId());
         return ResponseEntity.created(uriComponents.toUri())
                 .body(videoResponse);
     }
@@ -37,64 +36,68 @@ public class VideoController {
                                                   @RequestParam("videoId") String videoId,
                                                   UriComponentsBuilder uriComponentsBuilder) {
         String thumbnailUrl = videoService.uploadThumbnail(file, videoId);
-        UriComponents uriComponents = uriComponentsBuilder.path("/{id}").buildAndExpand(thumbnailUrl);
+        var uriComponents = uriComponentsBuilder.path("/{id}").buildAndExpand(thumbnailUrl);
         return ResponseEntity.created(uriComponents.toUri())
                 .body("Thumbnail Uploaded Successfully");
     }
 
     @PutMapping
-    public ResponseEntity<VideoDto> editVideoMetadata(@RequestBody @Validated VideoDto videoMetaDataDto) {
-        return ResponseEntity.ok(videoService.editVideoMetadata(videoMetaDataDto));
+    @ResponseStatus(HttpStatus.OK)
+    public VideoDto editVideoMetadata(@RequestBody @Validated VideoDto videoMetaDataDto) {
+        return videoService.editVideoMetadata(videoMetaDataDto);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<VideoDto> getVideoMetaData(@PathVariable String id) {
-        VideoDto videoDto = videoService.getVideo(id);
-        return ResponseEntity.ok(videoDto);
+    @ResponseStatus(HttpStatus.OK)
+    public VideoDto getVideoMetaData(@PathVariable String id) {
+        return videoService.getVideo(id);
     }
 
     @GetMapping
-    public ResponseEntity<List<VideoDto>> getVideoMetaData() {
-        List<VideoDto> videoDto = videoService.getAllVideos();
-        return ResponseEntity.ok(videoDto);
+    @ResponseStatus(HttpStatus.OK)
+    public List<VideoDto> getVideoMetaData() {
+        return videoService.getAllVideos();
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> deleteVideo(@PathVariable String id) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteVideo(@PathVariable String id) {
         videoService.deleteVideo(id);
-        return ResponseEntity.noContent().build();
-
     }
 
     @GetMapping("channel/{userId}")
-    public ResponseEntity<List<VideoDto>> allChannelVideos(@PathVariable String userId) {
-        List<VideoDto> allVideosByChannel = videoService.getAllVideosByChannel(userId);
-        return ResponseEntity.ok(allVideosByChannel);
+    @ResponseStatus(HttpStatus.OK)
+    public List<VideoDto> allChannelVideos(@PathVariable String userId) {
+        return videoService.getAllVideosByChannel(userId);
     }
 
     @PostMapping("{id}/like")
-    public ResponseEntity<VideoDto> likeVideo(@PathVariable String id) {
-        return ResponseEntity.ok(videoService.like(id));
+    @ResponseStatus(HttpStatus.OK)
+    public VideoDto likeVideo(@PathVariable String id) {
+        return videoService.like(id);
     }
 
     @PostMapping("{id}/dislike")
-    public ResponseEntity<VideoDto> disLikeVideo(@PathVariable String id) {
-        return ResponseEntity.ok(videoService.dislike(id));
+    @ResponseStatus(HttpStatus.OK)
+    public VideoDto disLikeVideo(@PathVariable String id) {
+        return videoService.dislike(id);
     }
 
     @GetMapping("suggested/{userId}")
-    public ResponseEntity<List<VideoDto>> getSuggestedVideos(@PathVariable String userId) {
-        return ResponseEntity.ok(videoService.getSuggestedVideos(userId));
+    @ResponseStatus(HttpStatus.OK)
+    public List<VideoDto> getSuggestedVideos(@PathVariable String userId) {
+        return videoService.getSuggestedVideos(userId);
     }
 
-    @PostMapping("{id]/comment")
-    public ResponseEntity<Void> addComments(@PathVariable String id, @RequestBody CommentDto commentDto) {
+    @PostMapping("{id}/comment")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void addComments(@PathVariable String id, @RequestBody CommentDto commentDto) {
         videoService.addComment(commentDto, id);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("{id}/comment")
-    public ResponseEntity<List<CommentDto>> getAllComments(@PathVariable String id) {
-        return ResponseEntity.ok(videoService.getAllComments(id));
+    @ResponseStatus(HttpStatus.OK)
+    public List<CommentDto> getAllComments(@PathVariable String id) {
+        return videoService.getAllComments(id);
     }
 }
