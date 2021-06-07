@@ -26,7 +26,7 @@ public class UserController {
         return userService.getHistory(id);
     }
 
-    @PostMapping("validate")
+    @GetMapping("validate")
     @ResponseStatus(HttpStatus.OK)
     public UserInfoDTO registerUser(HttpServletRequest httpServletRequest) {
         var userInfoDTO = userValidationService.validate(httpServletRequest.getHeader("Authorization"));
