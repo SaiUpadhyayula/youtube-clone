@@ -76,5 +76,7 @@ public class UserService {
         currentUser.addToSubscribedUsers(userId);
         var subscribedToUser = userRepository.findById(userId).orElseThrow(() -> new YoutubeCloneException("Invalid User - " + userId));
         subscribedToUser.addToSubscribers(subscribedToUser.getId());
+        userRepository.save(currentUser);
+        userRepository.save(subscribedToUser);
     }
 }

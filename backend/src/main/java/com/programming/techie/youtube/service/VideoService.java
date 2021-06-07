@@ -7,6 +7,7 @@ import com.programming.techie.youtube.exception.YoutubeCloneException;
 import com.programming.techie.youtube.mapper.CommentMapper;
 import com.programming.techie.youtube.mapper.VideoMapper;
 import com.programming.techie.youtube.model.Video;
+import com.programming.techie.youtube.model.VideoStatus;
 import com.programming.techie.youtube.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -49,6 +50,7 @@ public class VideoService {
     public List<VideoDto> getAllVideos() {
         return videoRepository.findAll()
                 .stream()
+                .filter(video -> VideoStatus.PUBLIC.equals(video.getVideoStatus()))
                 .map(videoMapper::mapToDto)
                 .collect(Collectors.toList());
     }

@@ -20,7 +20,7 @@ public class UserRegistrationService {
             userInfoDTO.setId(existingUserOpt.get().getId());
             return;
         }
-        User user = new User();
+        var user = new User();
         user.setSub(userInfoDTO.getSub());
         user.setEmailAddress(userInfoDTO.getEmail());
         user.setFirstName(userInfoDTO.getGivenName());

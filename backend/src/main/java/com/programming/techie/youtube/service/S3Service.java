@@ -20,7 +20,7 @@ public class S3Service implements FileService {
 
     @Override
     public String upload(MultipartFile file) {
-        String videoKey = String.format("video-%s.mp4", UUID.randomUUID().toString());
+        var videoKey = String.format("video-%s.mp4", UUID.randomUUID());
         var metadata = new ObjectMetadata();
         metadata.setContentLength(file.getSize());
         metadata.setContentType("video/mp4");
@@ -35,6 +35,6 @@ public class S3Service implements FileService {
 
     @Override
     public void deleteFile(String fileName) {
-
+        // TODO: Implement it soon
     }
 }
