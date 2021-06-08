@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -26,7 +27,7 @@ public class Video {
     private VideoStatus videoStatus;
     private AtomicInteger viewCount = new AtomicInteger(0);
     private String thumbnailUrl;
-    private List<Comment> comments;
+    private List<Comment> comments = new ArrayList<>();
 
     public int likeCount() {
         return likes.get();

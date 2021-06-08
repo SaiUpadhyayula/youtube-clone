@@ -150,6 +150,7 @@ public class VideoService {
         var video = getVideoById(videoId);
         var comment = commentMapper.mapFromDto(commentDto);
         video.addComment(comment);
+        videoRepository.save(video);
     }
 
     public List<CommentDto> getAllComments(String videoId) {

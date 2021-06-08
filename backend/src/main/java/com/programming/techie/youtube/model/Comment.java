@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
 
 import javax.validation.constraints.Min;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -13,6 +14,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 @AllArgsConstructor
 @Builder
 public class Comment {
+    @Id
+    private String id;
     private String text;
     private String author;
     @Min(value = 0)

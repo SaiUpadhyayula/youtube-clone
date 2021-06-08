@@ -1,8 +1,8 @@
-<form class="example-form">
+<form class="example-form" [formGroup]="commentsForm">
   <mat-form-field class="example-full-width">
     <mat-label>Leave a comment</mat-label>
-    <textarea matInput (focus)="this.showCommentButton()" (focusout)="this.hideCommentButton()" [mat-autosize]="true"
-              placeholder="Share your thoughts"></textarea>
+    <textarea matInput (focus)="this.showCommentButton()" [mat-autosize]="true"
+              [formControlName]="'comment'" placeholder="Share your thoughts"></textarea>
   </mat-form-field>
   <div fxLayout="row" *ngIf="showCommentSection">
     <div fxFlex="60%"></div>
@@ -11,18 +11,18 @@
         <button mat-button>CANCEL</button>
       </span>
       <span>
-        <button mat-button color="primary">COMMENT</button>
+        <button type="submit" (click)="postComment()" mat-button color="primary">COMMENT</button>
       </span>
     </div>
   </div>
 </form>
 <mat-divider></mat-divider>
-<div class="view-comments" *ngFor="let num of [1,2,3,4,5,6,7,8]">
+<div class="view-comments" *ngFor="let comment of comments">
   <div fxLayout="row">
     <div fxFlex="50%">
       <mat-card-header>
         <div matCardAvatar class="example-header-image"></div>
-        <a matCardTitle class="comment-author" routerLink="">Programming Techie</a>
+        <a matCardTitle class="comment-author" routerLink="">{{comment.commentAuthor}}</a>
         <p matCardSubtitle>1 Month Ago</p>
       </mat-card-header>
     </div>
@@ -33,6 +33,6 @@
     </div>
   </div>
   <div>
-    This is a great video, thanks for sharing, you deserve more subscribers
+    {{comment.commentText}}
   </div>
 </div>
