@@ -14,7 +14,7 @@ const routes: Routes = [
     path: '', component: HomeComponent,
   },
   {
-    path: 'video', component: VideoDetailComponent,
+    path: 'video/:videoId', component: VideoDetailComponent,
   },
   {
     path: 'callback', component: CallbackComponent,

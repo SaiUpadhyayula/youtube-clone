@@ -18,9 +18,9 @@
       <div>
         <mat-form-field appearance="fill">
           <mat-label>Video Status</mat-label>
-          <mat-select>
-            <mat-option value="option">PUBLIC</mat-option>
-            <mat-option value="option">PRIVATE</mat-option>
+          <mat-select [formControl]="videoStatus">
+            <mat-option value="PUBLIC">PUBLIC</mat-option>
+            <mat-option value="PRIVATE">PRIVATE</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
@@ -42,27 +42,28 @@
         </mat-form-field>
       </div>
       <div>
-        <div><label for="singleFile">Upload Thumbnail</label></div>
-        <div>
-          <input id="singleFile" type="file" [fileUploadInputFor]="fileUploadQueue"/>
-        </div>
-
-        <mat-file-upload-queue #fileUploadQueue
-                               [fileAlias]="'file'"
-                               [httpUrl]="'http://localhost:8180/jax-rs-jersey-application-sample'">
-
-          <mat-file-upload [file]="file" [id]="i"
-                           *ngFor="let file of fileUploadQueue.files; let i = index"></mat-file-upload>
-        </mat-file-upload-queue>
+        <label for="inputGroupFile01">Upload Thumbnail:
+          <div class="custom-file">
+            <input type="file" class="custom-file-input" id="inputGroupFile01"
+                   aria-describedby="inputGroupFileAddon01" (change)="onFileSelected($event)">
+          </div>
+          <br/>
+          <div *ngIf="fileUploaded">
+            <p>Selected File: {{selectedFileName}}</p>
+          </div>
+          <hr>
+          <button mat-raised-button color="primary" type="submit" (click)="onUpload()">Upload</button>
+        </label>
       </div>
+      <hr>
       <button type="submit" mat-raised-button color="primary" (click)="saveVideo()">Save</button>
     </form>
   </div>
   <div fxFlex="30%">
-    <app-video-player></app-video-player>
+    <app-video-player *ngIf="videoUrlAvailable" [videoUrl]="videoUrl"></app-video-player>
     <div *ngIf="showVideoUrl">
       <h1>You can now view the video at - </h1>
-      <a href="">http://localhost:4200/video</a>
+      <a href="">http://localhost:4200/video/{{videoId}}</a>
     </div>
   </div>
   <div fxFlex="20%"></div>

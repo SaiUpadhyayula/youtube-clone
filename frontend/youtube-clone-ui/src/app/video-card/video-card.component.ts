@@ -1,15 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input} from '@angular/core';
+import {VideoDto} from "../VideoDto";
 
 @Component({
   selector: 'app-video-card',
   templateUrl: './video-card.component.html',
   styleUrls: ['./video-card.component.css']
 })
-export class VideoCardComponent implements OnInit {
+export class VideoCardComponent {
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
+  @Input()
+  video!: VideoDto;
 
 }

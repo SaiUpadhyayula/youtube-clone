@@ -1,7 +1,7 @@
 <div fxLayout="row">
   <div fxFlex="65%" class="video-detail">
     <div fxLayout="column" fxLayoutGap="8px">
-      <app-video-player></app-video-player>
+      <app-video-player *ngIf="videoUrlAvailable" [videoUrl]="videoUrl"></app-video-player>
       <div class="mat-title">Youtube Clone Using Spring Boot and Angular</div>
       <div fxLayout="row">
         <div fxFlex="50%">
@@ -11,14 +11,17 @@
         </div>
         <div fxFlex="50%" fxLayoutAlign="end">
           <span class="like-dislike-section">
-              <button mat-icon-button class="thumbs-up" aria-label="Example icon button with a vertical three dot icon">
+              <button mat-icon-button class="thumbs-up"
+                      (click)="likeVideo()"
+                      aria-label="Example icon button with a vertical three dot icon">
                 <mat-icon>thumb_up_off_alt</mat-icon>
-                100
+                {{likeCount}}
               </button>
               <button mat-icon-button class="thumbs-down"
+                      (click)="dislikeVideo()"
                       aria-label="Example icon button with a vertical three dot icon">
                 <mat-icon>thumb_down_off_alt</mat-icon>
-                0
+                {{dislikeCount}}
               </button>
           </span>
         </div>

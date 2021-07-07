@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from "rxjs";
 import {Router} from "@angular/router";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
@@ -43,6 +43,7 @@ export class AuthService {
       }
     });
   }
+
   validateUser(token: string): Observable<any> {
     return this.http.get('http://localhost:8080/api/user/validate',
       {
@@ -50,7 +51,7 @@ export class AuthService {
       });
   }
 
-  private static setSession(authResult:any): void {
+  private static setSession(authResult: any): void {
     // Set the time that the access token will expire at
     const expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
     localStorage.setItem('access_token', authResult.accessToken);
@@ -69,5 +70,9 @@ export class AuthService {
 
   public isLoggedIn(): boolean {
     return localStorage.getItem('access_token') !== null;
+  }
+
+  public getUserId(): string|null {
+    return localStorage.getItem('userId');
   }
 }

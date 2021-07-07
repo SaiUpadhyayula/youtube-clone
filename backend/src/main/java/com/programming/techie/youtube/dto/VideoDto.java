@@ -27,7 +27,9 @@ public class VideoDto {
     private List<String> tags;
     private VideoStatus videoStatus;
     @NotBlank
-    private String fileName;
+    private String url;
+    @NotBlank
+    private String thumbnailUrl;
     @Min(value = 0)
     private int likeCount;
     @Min(value = 0)

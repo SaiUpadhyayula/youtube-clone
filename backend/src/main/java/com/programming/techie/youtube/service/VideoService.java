@@ -74,7 +74,7 @@ public class VideoService {
         var video = getVideoById(videoMetaDataDto.getVideoId());
         video.setTitle(videoMetaDataDto.getVideoName());
         video.setDescription(videoMetaDataDto.getDescription());
-        video.setUrl(videoMetaDataDto.getFileName());
+        video.setUrl(videoMetaDataDto.getUrl());
         // Ignore Channel ID as it should not be possible to change the Channel of a Video
         video.setTags(videoMetaDataDto.getTags());
         video.setVideoStatus(videoMetaDataDto.getVideoStatus());
@@ -84,7 +84,7 @@ public class VideoService {
     }
 
     public void deleteVideo(String id) {
-        String videoUrl = getVideo(id).getFileName();
+        String videoUrl = getVideo(id).getUrl();
         s3Service.deleteFile(videoUrl);
     }
 
@@ -115,33 +115,35 @@ public class VideoService {
     }
 
     public VideoDto like(String videoId) {
-        if (userService.ifLikedVideo(videoId)) {
-            throw new YoutubeCloneException("User already liked the video - " + videoId);
-        }
         var video = getVideoById(videoId);
 
-        if (userService.ifDisLikedVideo(videoId)) {
+        if (userService.ifLikedVideo(videoId)) {
+            video.decreaseLikeCount();
+            userService.removeFromLikedVideos(videoId);
+        } else if (userService.ifDisLikedVideo(videoId)) {
             video.decreaseDisLikeCount();
             userService.removeFromDisLikedVideo(videoId);
+        } else {
+            video.increaseLikeCount();
+            userService.addToLikedVideos(videoId);
         }
-        video.increaseLikeCount();
-        userService.addToLikedVideos(videoId);
         videoRepository.save(video);
         return videoMapper.mapToDto(video);
     }
 
     public VideoDto dislike(String videoId) {
-        if (userService.ifDisLikedVideo(videoId)) {
-            throw new YoutubeCloneException("User already disliked the video - " + videoId);
-        }
-
         var video = getVideoById(videoId);
-        if (userService.ifLikedVideo(videoId)) {
+
+        if (userService.ifDisLikedVideo(videoId)) {
+            video.decreaseDisLikeCount();
+            userService.removeFromDisLikedVideo(videoId);
+        } else if (userService.ifLikedVideo(videoId)) {
             video.decreaseLikeCount();
             userService.removeFromLikedVideos(videoId);
+        } else {
+            video.increaseDisLikeCount();
+            userService.addToDisLikedVideo(videoId);
         }
-        video.increaseDisLikeCount();
-        userService.addToDisLikedVideo(videoId);
         videoRepository.save(video);
         return videoMapper.mapToDto(video);
     }

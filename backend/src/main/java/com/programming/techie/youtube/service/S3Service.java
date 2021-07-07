@@ -6,6 +6,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.programming.techie.youtube.exception.YoutubeCloneException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -20,17 +21,18 @@ public class S3Service implements FileService {
 
     @Override
     public String upload(MultipartFile file) {
-        var videoKey = String.format("video-%s.mp4", UUID.randomUUID());
+        String extension = StringUtils.getFilenameExtension(file.getOriginalFilename());
+        var key = String.format("%s.%s", UUID.randomUUID(), extension);
         var metadata = new ObjectMetadata();
         metadata.setContentLength(file.getSize());
-        metadata.setContentType("video/mp4");
+        metadata.setContentType(file.getContentType());
         try {
-            amazonS3Client.putObject(BUCKET_NAME, videoKey, file.getInputStream(), metadata);
+            amazonS3Client.putObject(BUCKET_NAME, key, file.getInputStream(), metadata);
         } catch (IOException e) {
             throw new YoutubeCloneException("An Exception Occurred while uploading file");
         }
-        amazonS3Client.setObjectAcl(BUCKET_NAME, videoKey, CannedAccessControlList.PublicRead);
-        return amazonS3Client.getResourceUrl(BUCKET_NAME, videoKey);
+        amazonS3Client.setObjectAcl(BUCKET_NAME, key, CannedAccessControlList.PublicRead);
+        return amazonS3Client.getResourceUrl(BUCKET_NAME, key);
     }
 
     @Override

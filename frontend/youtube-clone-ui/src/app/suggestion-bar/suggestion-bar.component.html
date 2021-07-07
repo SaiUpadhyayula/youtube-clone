@@ -1,6 +1,6 @@
 <div fxLayout="column wrap" fxLayoutGap="16px grid">
   <h3>Suggested Videos</h3>
-  <div fxFlex="5%" *ngFor="let num of [1,2,3,4,5]">
-    <app-video-card></app-video-card>
+  <div fxFlex="5%" *ngFor="let video of suggestedVideos">
+    <app-video-card [video]="video"></app-video-card>
   </div>
 </div>

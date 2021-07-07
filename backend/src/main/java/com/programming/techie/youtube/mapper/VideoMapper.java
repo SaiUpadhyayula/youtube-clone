@@ -9,12 +9,13 @@ public class VideoMapper {
     public VideoDto mapToDto(Video video) {
         return VideoDto.builder()
                 .videoId(video.getId())
-                .fileName(video.getUrl())
+                .url(video.getUrl())
                 .description(video.getDescription())
                 .tags(video.getTags())
                 .videoName(video.getTitle())
                 .videoStatus(video.getVideoStatus())
                 .userId(video.getUserId())
+                .thumbnailUrl(video.getThumbnailUrl())
                 .likeCount(video.getLikes().get())
                 .dislikeCount(video.getDisLikes().get())
                 .build();
